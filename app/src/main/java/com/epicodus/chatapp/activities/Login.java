@@ -31,6 +31,7 @@ public class Login extends AppCompatActivity {
     public void registerViewWasClicked(View v) {
         startActivity(new Intent(Login.this, Register.class));
     }
+
     @OnClick(R.id.loginButton)
     public void loginViewWasClicked(View v) {
         user = userName.getText().toString();
@@ -41,7 +42,7 @@ public class Login extends AppCompatActivity {
         } else if(pass.equals("")) {
             password.setError("can't be blank");
         } else {
-            String url = "https://androidchatapp-76776.firebaseio.com/users.json";
+            String url = "https://chatapp-aa575.firebaseio.com/users.json";
             final ProgressDialog pd = new ProgressDialog(Login.this);
             pd.setMessage("Loading...");
             pd.show();
@@ -56,8 +57,7 @@ public class Login extends AppCompatActivity {
                     else {
                         try {
                             JSONObject obj = new JSONObject(s);
-
-
+                            Log.v("asJSONOBJECT", obj.toString());
                             if(!obj.has(user)){
                                 Toast.makeText(Login.this, "user not found", Toast.LENGTH_LONG).show();
                             }
@@ -87,6 +87,7 @@ public class Login extends AppCompatActivity {
             rQueue.add(request);
         }
     }
+
     private EditText userName, password;
     private String user, pass;
 
