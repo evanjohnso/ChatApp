@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ChatApp</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="click_here_to_login">Click here to login</string>
+    <string name="write_a_message">Write a message</string>
 </resources>
