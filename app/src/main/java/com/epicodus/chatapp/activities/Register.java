@@ -2,12 +2,14 @@ package com.epicodus.chatapp.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,20 +55,10 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-//
-//        Map<String, String> newUserAndPassword = new HashMap<>();
-//
-//        newUser.put("russia", "russia");
-//        newUserAndPassword.put("password", "russia");
-//
+
         mDataBase = FirebaseDatabase
                 .getInstance()
                 .getReference();
-
-//        FirebaseDatabase
-//                .getInstance()
-//                .getReference("users/russia")
-//                .setValue(newUserAndPassword);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +80,9 @@ public class Register extends AppCompatActivity {
                     final ProgressDialog pd = new ProgressDialog(Register.this);
                     pd.setMessage("Loading...");
                     pd.show();
+//                    final ProgressBar pb = new ProgressBar(Register.this);
+//                    pb.setIndeterminate(true);
+
 
                     mDataBase
                             .child("userNames")
@@ -101,8 +96,12 @@ public class Register extends AppCompatActivity {
                                         newName.put(user, user);
                                         mDataBase.child("userNames").updateChildren(newName);
                                         mDataBase.child("users").child(user).setValue(newUser);
+                                        UserDetails.username = user;
+                                        UserDetails.password = pass;
                                         Toast.makeText(Register.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(Register.this, Chat.class));
+                                        Intent intent = new Intent(Register.this, Users.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
                                         pd.cancel();
                                     } else {
                                         pd.cancel();
@@ -117,5 +116,12 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        username.getText().clear();
+        password.getText().clear();
+        super.onStop();
     }
 }

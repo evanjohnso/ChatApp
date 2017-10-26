@@ -45,7 +45,7 @@ public class Chat extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         reference1 = new Firebase(Constants.FIREBASE_URL + "/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
-        reference2 = new Firebase(Constants.FIREBASE_URL+ "/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+        reference2 = new Firebase(Constants.FIREBASE_URL + "/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

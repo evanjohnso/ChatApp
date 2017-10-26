@@ -1,6 +1,5 @@
 package com.epicodus.chatapp.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,7 +21,6 @@ import com.epicodus.chatapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,7 +35,7 @@ public class Users extends AppCompatActivity {
     @Bind(R.id.editText5)
     TextView noUsersText;
 
-    ArrayList<String> al = new ArrayList<>();
+    ArrayList<String> contactListFromFirebaseExemptLoggedInUser = new ArrayList<>();
     int totalUsers = 0;
     ProgressDialog pd;
 
@@ -52,7 +49,7 @@ public class Users extends AppCompatActivity {
         pd.setMessage("Loading...");
         pd.show();
 
-        String url = Constants.FIREBASE_URL + "/users.json";
+        String url = Constants.FIREBASE_URL + "/userNames.json";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
             @Override
@@ -72,7 +69,7 @@ public class Users extends AppCompatActivity {
         usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UserDetails.chatWith = al.get(position);
+                UserDetails.chatWith = contactListFromFirebaseExemptLoggedInUser.get(position);
                 startActivity(new Intent(Users.this, Chat.class));
             }
         });
@@ -89,7 +86,7 @@ public class Users extends AppCompatActivity {
                 key = i.next().toString();
 
                 if(!key.equals(UserDetails.username)) {
-                    al.add(key);
+                    contactListFromFirebaseExemptLoggedInUser.add(key);
                 }
 
                 totalUsers++;
@@ -106,7 +103,7 @@ public class Users extends AppCompatActivity {
         else{
             noUsersText.setVisibility(View.GONE);
             usersList.setVisibility(View.VISIBLE);
-            usersList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al));
+            usersList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contactListFromFirebaseExemptLoggedInUser));
         }
 
         pd.dismiss();
