@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,8 +20,11 @@ import com.android.volley.toolbox.Volley;
 import com.epicodus.chatapp.Constants;
 import com.epicodus.chatapp.R;
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,12 +32,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class Register extends AppCompatActivity {
-    EditText username, password;
-    Button registerButton;
+    @Bind(R.id.username) EditText username;
+    @Bind(R.id.password) EditText password;
+    @Bind(R.id.registerButton) Button registerButton;
     String user, pass;
     DatabaseReference mDataBase;
 
@@ -47,11 +53,6 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
-        registerButton = (Button) findViewById(R.id.registerButton);
-
 //        Map<String, String> newUser = new HashMap<>();
 //        Map<String, String> newUserAndPassword = new HashMap<>();
 //
@@ -61,6 +62,8 @@ public class Register extends AppCompatActivity {
         mDataBase = FirebaseDatabase
                 .getInstance()
                 .getReference();
+
+
 
 //        FirebaseDatabase
 //                .getInstance()
@@ -88,52 +91,24 @@ public class Register extends AppCompatActivity {
                     pd.setMessage("Loading...");
                     pd.show();
 
-
-
-
-
-
-
-
-
-
-                    StringRequest request = new StringRequest(Request.Method.GET, Constants.FIREBASE_URL + "/userNames.json", new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String s) {
-
-
-                            if (s.equals("null")) {
-//                                reference.child(user).child("password").setValue(pass);
-                                Toast.makeText(Register.this, "registration successful", Toast.LENGTH_LONG).show();
-                            } else {
-                                try {
-                                    JSONObject obj = new JSONObject(s);
-
-                                    if (!obj.has(user)) {
-//                                        reference.child(user).child("password").setValue(pass);
-                                        Toast.makeText(Register.this, "registration successful", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(Register.this, "username already exists", Toast.LENGTH_LONG).show();
+                    mDataBase
+                            .child("userNames")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (!dataSnapshot.hasChild(user)) {
+                                        Map<String, String> newUser = new HashMap<>();
+                                        newUser.put("password", pass);
+                                        mDataBase.child("users").child(user).setValue(newUser);
+                                        Toast.makeText(Register.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(Register.this, Chat.class));
                                     }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-
-                            pd.dismiss();
-                        }
-
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            System.out.println("" + volleyError);
-                            pd.dismiss();
-                        }
-                    });
-
-                    RequestQueue rQueue = Volley.newRequestQueue(Register.this);
-                    rQueue.add(request);
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Toast.makeText(Register.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             }
         });
