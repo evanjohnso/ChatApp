@@ -53,7 +53,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-//        Map<String, String> newUser = new HashMap<>();
+//
 //        Map<String, String> newUserAndPassword = new HashMap<>();
 //
 //        newUser.put("russia", "russia");
@@ -62,8 +62,6 @@ public class Register extends AppCompatActivity {
         mDataBase = FirebaseDatabase
                 .getInstance()
                 .getReference();
-
-
 
 //        FirebaseDatabase
 //                .getInstance()
@@ -99,9 +97,16 @@ public class Register extends AppCompatActivity {
                                     if (!dataSnapshot.hasChild(user)) {
                                         Map<String, String> newUser = new HashMap<>();
                                         newUser.put("password", pass);
+                                        Map<String, Object> newName = new HashMap<>();
+                                        newName.put(user, user);
+                                        mDataBase.child("userNames").updateChildren(newName);
                                         mDataBase.child("users").child(user).setValue(newUser);
                                         Toast.makeText(Register.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(Register.this, Chat.class));
+                                        pd.cancel();
+                                    } else {
+                                        pd.cancel();
+                                        Toast.makeText(Register.this, "Username already exits", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 @Override
