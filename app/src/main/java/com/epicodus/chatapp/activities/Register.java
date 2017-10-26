@@ -80,9 +80,6 @@ public class Register extends AppCompatActivity {
                     final ProgressDialog pd = new ProgressDialog(Register.this);
                     pd.setMessage("Loading...");
                     pd.show();
-//                    final ProgressBar pb = new ProgressBar(Register.this);
-//                    pb.setIndeterminate(true);
-
 
                     mDataBase
                             .child("userNames")

@@ -4,4 +4,5 @@
     <string name="password">Password</string>
     <string name="click_here_to_login">Click here to login</string>
     <string name="write_a_message">Write a message</string>
+    <string name="sign_out">Sign out</string>
 </resources>

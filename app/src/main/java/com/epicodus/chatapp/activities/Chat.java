@@ -3,6 +3,8 @@ package com.epicodus.chatapp.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,10 +45,10 @@ public class Chat extends AppCompatActivity {
         messageArea = (EditText)findViewById(R.id.messageArea);
         scrollView = (ScrollView)findViewById(R.id.scrollView);
 
-        Firebase.setAndroidContext(this);
-
-        reference1 = new Firebase(Constants.FIREBASE_URL + "/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
-        reference2 = new Firebase(Constants.FIREBASE_URL + "/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+        String userNameChatWithFormat = String.format("messages/%s_%s", UserDetails.username, UserDetails.chatWith);
+        String chatWithUserNameFormat = String.format("messages/%s_%s", UserDetails.chatWith, UserDetails.username);
+        FirebaseDatabase.getInstance().getReference().child(userNameChatWithFormat);
+        FirebaseDatabase.getInstance().getReference().child(chatWithUserNameFormat);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,11 +113,11 @@ public class Chat extends AppCompatActivity {
         lp2.weight = 1.0f;
 
         if(type == 1) {
-            lp2.gravity = Gravity.LEFT;
+            lp2.gravity = Gravity.START;
             textView.setBackgroundResource(R.drawable.bubble_in);
         }
         else{
-            lp2.gravity = Gravity.RIGHT;
+            lp2.gravity = Gravity.END;
             textView.setBackgroundResource(R.drawable.bubble_out);
         }
         textView.setLayoutParams(lp2);
