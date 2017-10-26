@@ -88,8 +88,10 @@ public class Login extends AppCompatActivity {
             rQueue.add(request);
         }
     }
-
-    private EditText userName, password;
+    @Bind(R.id.username)
+    EditText userName;
+    @Bind(R.id.password)
+    EditText password;
     private String user, pass;
 
     @Override
@@ -97,8 +99,5 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        userName = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
     }
 }

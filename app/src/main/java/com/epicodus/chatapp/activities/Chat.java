@@ -43,6 +43,7 @@ public class Chat extends AppCompatActivity {
         scrollView = (ScrollView)findViewById(R.id.scrollView);
 
         Firebase.setAndroidContext(this);
+
         reference1 = new Firebase(Constants.FIREBASE_URL + "/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
         reference2 = new Firebase(Constants.FIREBASE_URL+ "/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
 
@@ -58,6 +59,8 @@ public class Chat extends AppCompatActivity {
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
                     messageArea.setText("");
+                } else {
+                    messageArea.setError("Enter a text, yo!");
                 }
             }
         });
