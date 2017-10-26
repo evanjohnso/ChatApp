@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.epicodus.chatapp.Constants;
 import com.epicodus.chatapp.R;
 
 import org.json.JSONException;
@@ -51,7 +52,7 @@ public class Users extends AppCompatActivity {
         pd.setMessage("Loading...");
         pd.show();
 
-        String url = "https://chatapp-aa575.firebaseio.com/users.json";
+        String url = Constants.FIREBASE_URL + "/users.json";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
             @Override

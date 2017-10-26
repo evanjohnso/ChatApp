@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.epicodus.chatapp.Constants;
 import com.epicodus.chatapp.R;
 
 import org.json.JSONException;
@@ -42,7 +43,7 @@ public class Login extends AppCompatActivity {
         } else if(pass.equals("")) {
             password.setError("can't be blank");
         } else {
-            String url = "https://chatapp-aa575.firebaseio.com/users.json";
+            String url = Constants.FIREBASE_URL+ "/users.json";
             final ProgressDialog pd = new ProgressDialog(Login.this);
             pd.setMessage("Loading...");
             pd.show();
